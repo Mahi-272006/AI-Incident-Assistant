@@ -68,3 +68,82 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+AI Incident Assistant
+
+AI Incident Assistant is an intelligent tool designed to automate IT incident management. It classifies tickets, predicts priority, assigns teams, provides AI-generated troubleshooting steps, and can even estimate business impact. It’s built with Flask for the backend and React for the frontend.
+
+Features
+📝 Ticket Analysis: Automatically categorizes incidents and detects priority.
+⚡ Assigned Team Recommendation: Suggests the right IT team for each incident.
+🤖 AI Solution Generation: Provides step-by-step troubleshooting instructions.
+📊 Incident Impact Prediction: Estimates affected employees, downtime, and business risk.
+🔍 Similar Past Incidents: Shows related tickets to assist troubleshooting.
+🎤 Voice Incident Reporting: Users can speak incidents directly.
+🌙 Dark Theme Frontend: Modern and user-friendly UI.
+⚠ Recurring Issue Detection: Highlights issues that occur frequently.
+Technologies Used
+Backend: Python, Flask, REST API
+Frontend: React, JavaScript, CSS (Dark Theme)
+AI & ML: GPT-5 mini (via Gemini API) for solution generation
+Other Services: RAG for knowledge base retrieval, priority detection, and team assignment
+Installation
+1. Clone the repository
+git clone https://github.com/<your-username>/ai-incident-assistant.git
+cd ai-incident-assistant
+2. Setup Backend
+# Create and activate Python virtual environment
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# macOS/Linux
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+3. Setup Frontend
+cd frontend
+npm install
+4. Running the Project
+
+Start the Backend (Flask)
+
+cd ../backend
+python app.py
+
+Start the Frontend (React)
+
+cd ../frontend
+npm start
+
+Open http://localhost:3000
+ in your browser.
+
+Testing Accuracy
+
+You can test system accuracy by running:
+
+python test_accuracy.py
+
+It will display:
+
+Category Accuracy
+Priority Accuracy
+Assigned Team Accuracy
+Project Structure
+ai-incident-assistant/
+│
+├─ backend/          # Flask backend
+│  ├─ services/      # ML & AI services
+│  ├─ routes/        # Flask routes
+│  └─ app.py         # Main Flask application
+│
+├─ frontend/         # React frontend
+│  ├─ public/        # Static files
+│  └─ src/           # React source code
+│
+├─ knowledge/        # Incident knowledge base
+│  └─ incidents.json
+│
+└─ README.md
