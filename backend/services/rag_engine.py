@@ -13,27 +13,37 @@ documents = [
 "Laptop freezing can be resolved by updating drivers and scanning for malware",
 "System performance issues may require closing background applications"
 ]
+from sentence_transformers import SentenceTransformer, util
+import json
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+with open("knowledge/incidents.json") as f:
+    incidents = json.load(f)
 
 doc_embeddings = model.encode(documents)
 
 index = faiss.IndexFlatL2(len(doc_embeddings[0]))
 index.add(np.array(doc_embeddings))
 
-def get_similar_solution(query):
 
-    query_vector = model.encode([query])
 
-    D, I = index.search(np.array(query_vector), k=1)
+def get_similar_solution(ticket):
 
-    distance = D[0][0]
-    idx = I[0][0]
+    ticket_embedding = model.encode(ticket)
 
-    THRESHOLD = 0.6
+    best_score = 0
+    best_solution = None
 
-    if distance > THRESHOLD:
-        return "No relevant knowledge base article found."
+    for incident in incidents:
+        emb = model.encode(incident["ticket"])
+        score = util.cos_sim(ticket_embedding, emb)
 
-    return documents[idx]
+        if score > best_score:
+            best_score = score
+            best_solution = incident["solution"]
+
+    return best_solution
 
 def get_similar_tickets(query, k=3):
     query_vector = model.encode([query])

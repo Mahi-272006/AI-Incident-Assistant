@@ -3,7 +3,22 @@ import os
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-def assign_team(ticket, category):
+def assign_team(ticket,category):
+
+    mapping = {
+        "Network Issue": "Network Operations",
+        "Authentication Issue": "IT Security",
+        "Server Issue": "Server Operations",
+
+        "Hardware Issue": "IT Support",
+        "Printer Issue": "IT Support",
+        "Email Issue": "IT Support",
+        "OS Issue": "IT Support",
+        "Software Issue": "IT Support",
+        "General IT Issue": "IT Support"
+    }
+
+    return mapping.get(category, "IT Support")
 
     prompt = f"""
     You are an IT incident routing system.
@@ -27,5 +42,7 @@ def assign_team(ticket, category):
         messages=[{"role": "user", "content": prompt}],
         model="llama-3.1-8b-instant"
     )
+
+    
 
     return response.choices[0].message.content.strip()

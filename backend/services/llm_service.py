@@ -9,15 +9,20 @@ def generate_solution(ticket, context):
 
     
     prompt = f"""
-Ticket: {ticket}
+You are an IT support expert.
 
-If the provided knowledge base information is relevant, use it.
-If it is not relevant, ignore it and generate your own troubleshooting steps.
+Incident:
+{ticket}
 
-Knowledge base information:
+Relevant knowledge base solution:
 {context}
 
-Provide clear troubleshooting steps.
+Generate clear troubleshooting steps ONLY related to the incident.
+
+Rules:
+- Do not mention unrelated technologies.
+- Use numbered steps.
+- Be concise and practical.
 """
 
     chat_completion = client.chat.completions.create(
