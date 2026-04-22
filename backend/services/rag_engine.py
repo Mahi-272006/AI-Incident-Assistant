@@ -1,4 +1,4 @@
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, util
 import numpy as np
 import faiss
 import json
@@ -13,10 +13,6 @@ documents = [
 "Laptop freezing can be resolved by updating drivers and scanning for malware",
 "System performance issues may require closing background applications"
 ]
-from sentence_transformers import SentenceTransformer, util
-import json
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
 
 with open("knowledge/incidents.json") as f:
     incidents = json.load(f)

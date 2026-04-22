@@ -1,7 +1,8 @@
 from groq import Groq
 from dotenv import load_dotenv
 import os
-load_dotenv()  # load .env variables
+
+load_dotenv()
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
@@ -9,14 +10,13 @@ def detect_priority(ticket):
 
     t = ticket.lower()
 
+    # -------- RULE-BASED LOGIC -------- #
+
     # HIGH
     if "server" in t or "database" in t:
         return "HIGH"
 
-    if "cannot login" in t or "password" in t:
-        return "HIGH"
-
-    if "authentication" in t:
+    if "cannot login" in t or "password" in t or "authentication" in t:
         return "HIGH"
 
     if "cannot send email" in t:
@@ -42,24 +42,34 @@ def detect_priority(ticket):
     if "monitor" in t or "camera" in t:
         return "LOW"
 
-    return "LOW"
+    # -------- LLM FALLBACK -------- #
 
-    # LLM fallback
     prompt = f"""
 Determine priority for this IT ticket.
 
-LOW → single user
-MEDIUM → multiple users
-HIGH → system outage
+Rules:
+LOW → single user issue
+MEDIUM → affects multiple users
+HIGH → system outage or critical issue
 
 Ticket: {ticket}
 
-Return only: LOW, MEDIUM, HIGH
+Return only one word: LOW, MEDIUM, or HIGH.
 """
 
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[{"role": "user", "content": prompt}]
-    )
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": prompt}]
+        )
 
-    return response.choices[0].message.content.strip()
+        result = response.choices[0].message.content.strip().upper()
+
+        if result in ["LOW", "MEDIUM", "HIGH"]:
+            return result
+
+    except Exception:
+        pass
+
+    # Final fallback (safety)
+    return "LOW"
